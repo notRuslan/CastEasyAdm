@@ -35,7 +35,9 @@ class UserCrudController extends AbstractCrudController
         yield ImageField::new('avatar')
         ->setBasePath('uploads/avatars')
         ->setUploadDir('public/uploads/avatars')
-        ->setUploadedFileNamePattern('[slug]-[timestamp].[extension]');
+        ->setUploadedFileNamePattern('[slug]-[timestamp].[extension]')
+//        ->setFormTypeOption('upload_new', function()) // Add login to save in S3 service
+        ;
         yield EmailField::new('email');
         yield TextField::new('fullName') //it works because User::getFullName exists
         ->hideOnForm();
