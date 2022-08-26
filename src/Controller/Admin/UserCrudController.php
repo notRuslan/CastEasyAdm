@@ -11,6 +11,7 @@ use EasyCorp\Bundle\EasyAdminBundle\Field\DateField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\EmailField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\Field;
 use EasyCorp\Bundle\EasyAdminBundle\Field\IdField;
+use EasyCorp\Bundle\EasyAdminBundle\Field\ImageField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\TextField;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 
@@ -31,6 +32,9 @@ class UserCrudController extends AbstractCrudController
          ]; // OR :  */
         yield IdField::new('id')
             ->onlyOnIndex();
+        yield ImageField::new('avatar')
+        ->setBasePath('uploads/avatars')
+        ->setUploadDir('public/uploads/avatars');
         yield EmailField::new('email');
         yield TextField::new('fullName') //it works because User::getFullName exists
         ->hideOnForm();
@@ -56,6 +60,7 @@ class UserCrudController extends AbstractCrudController
             ->renderExpanded()
             ->renderAsBadges()
         ;
+
 
     }
 
