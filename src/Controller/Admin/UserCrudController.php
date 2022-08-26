@@ -13,28 +13,32 @@ use EasyCorp\Bundle\EasyAdminBundle\Field\TextField;
 
 class UserCrudController extends AbstractCrudController
 {
-    public static function getEntityFqcn(): string
+    public static function getEntityFqcn():string
     {
         return User::class;
     }
 
 
-    public function configureFields(string $pageName): iterable
+    public function configureFields(string $pageName):iterable
     {
-       /* return [
-            IdField::new('id'),
-            TextField::new('title'),
-            TextEditorField::new('description'),
-        ]; // OR :  */
+        /* return [
+             IdField::new('id'),
+             TextField::new('title'),
+             TextEditorField::new('description'),
+         ]; // OR :  */
         yield IdField::new('id')
-        ->onlyOnIndex();
+            ->onlyOnIndex();
         yield EmailField::new('email');
-        yield TextField::new('fullName'); //it works because User::getFullName exists
-//        yield TextField::new('firstName');
-//        yield TextField::new('lastName');
+        yield TextField::new('fullName') //it works because User::getFullName exists
+        ->hideOnForm();
+        yield TextField::new('firstName')
+            ->onlyOnForms();
+        yield TextField::new('lastName')
+            ->onlyOnForms();
         yield BooleanField::new('enabled')
-        ->renderAsSwitch(false);
-        yield DateField::new('createdAt');
+            ->renderAsSwitch(false);
+        yield DateField::new('createdAt')
+        ->hideOnForm();
 
     }
 
