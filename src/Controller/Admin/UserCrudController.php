@@ -26,7 +26,8 @@ class UserCrudController extends AbstractCrudController
             TextField::new('title'),
             TextEditorField::new('description'),
         ]; // OR :  */
-        yield IdField::new('id');
+        yield IdField::new('id')
+        ->onlyOnIndex();
         yield EmailField::new('email');
         yield TextField::new('fullName'); //it works because User::getFullName exists
 //        yield TextField::new('firstName');
