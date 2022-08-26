@@ -31,7 +31,8 @@ class UserCrudController extends AbstractCrudController
         yield TextField::new('fullName'); //it works because User::getFullName exists
 //        yield TextField::new('firstName');
 //        yield TextField::new('lastName');
-        yield BooleanField::new('enabled');
+        yield BooleanField::new('enabled')
+        ->renderAsSwitch(false);
         yield DateField::new('createdAt');
 
     }
