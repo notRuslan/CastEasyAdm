@@ -44,9 +44,9 @@ class QuestionCrudController extends AbstractCrudController
             ->setParameter('enabled', true);
         });
         yield AssociationField::new('answers')
-        ->setFormTypeOption('choice_label', 'id')
+//        ->setFormTypeOption('choice_label', 'id') // does not work with autocomplete
         ->setFormTypeOption('by_reference', false)
-        ;
+        ->autocomplete();
 
         yield Field::new('createdAt')
         ->hideOnForm();
