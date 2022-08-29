@@ -5,6 +5,8 @@ namespace App\Controller\Admin;
 use App\Entity\Question;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Crud;
 use EasyCorp\Bundle\EasyAdminBundle\Controller\AbstractCrudController;
+use EasyCorp\Bundle\EasyAdminBundle\Field\Field;
+use EasyCorp\Bundle\EasyAdminBundle\Field\IdField;
 
 class QuestionCrudController extends AbstractCrudController
 {
@@ -13,16 +15,19 @@ class QuestionCrudController extends AbstractCrudController
         return Question::class;
     }
 
-    /*
+
     public function configureFields(string $pageName): iterable
     {
-        return [
-            IdField::new('id'),
-            TextField::new('title'),
-            TextEditorField::new('description'),
-        ];
+        yield IdField::new('id')
+            ->onlyOnIndex();
+        yield Field::new('name');
+        yield Field::new('votes')
+        ->setLabel('Total Votes');
+        yield Field::new('createdAt')
+        ->hideOnForm();
+
     }
-    */
+
 /*    public function configureCrud(Crud $crud): Crud
     {
         return parent::configureCrud($crud)
