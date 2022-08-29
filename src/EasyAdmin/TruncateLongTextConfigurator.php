@@ -2,6 +2,7 @@
 
 namespace App\EasyAdmin;
 
+use EasyCorp\Bundle\EasyAdminBundle\Config\Crud;
 use EasyCorp\Bundle\EasyAdminBundle\Context\AdminContext;
 use EasyCorp\Bundle\EasyAdminBundle\Contracts\Field\FieldConfiguratorInterface;
 use EasyCorp\Bundle\EasyAdminBundle\Dto\EntityDto;
@@ -21,7 +22,10 @@ class TruncateLongTextConfigurator implements FieldConfiguratorInterface
 
     public function configure(FieldDto $field, EntityDto $entityDto, AdminContext $context):void
     {
-//        dd($field);
+        $crud = $context->getCrud();
+        if($crud?->getCurrentPage() === Crud::PAGE_DETAIL){
+            return;
+        }
         if (strlen($field->getFormattedValue()) < self::MAX_LENGTH) {
             return;
         }
