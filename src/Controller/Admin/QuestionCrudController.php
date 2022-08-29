@@ -29,7 +29,15 @@ class QuestionCrudController extends AbstractCrudController
         yield Field::new('votes', 'Total Votes')
         ->setTextAlign('right');
 //        ->setLabel('Total Votes');
-        yield AssociationField::new('askedBy');
+        yield AssociationField::new('askedBy')
+        ->autocomplete()
+        ->formatValue(static function($value, ?Question $question){
+            if(!$user = $question->getAskedBy()){
+                return null;
+            }
+
+            return sprintf('%s&nbsp;(%s)', $user->getEmail(), $user->getQuestions()->count());
+        });
         yield Field::new('createdAt')
         ->hideOnForm();
 
