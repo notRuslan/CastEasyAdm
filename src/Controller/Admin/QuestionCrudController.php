@@ -21,8 +21,9 @@ class QuestionCrudController extends AbstractCrudController
         yield IdField::new('id')
             ->onlyOnIndex();
         yield Field::new('name');
-        yield Field::new('votes')
-        ->setLabel('Total Votes');
+        yield Field::new('votes', 'Total Votes')
+        ->setTextAlign('right');
+//        ->setLabel('Total Votes');
         yield Field::new('createdAt')
         ->hideOnForm();
 
