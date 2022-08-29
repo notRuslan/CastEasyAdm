@@ -24,7 +24,11 @@ class QuestionCrudController extends AbstractCrudController
         yield IdField::new('id')
             ->onlyOnIndex();
         yield Field::new('slug')
-            ->hideOnIndex();
+            ->hideOnIndex()
+        ->setFormTypeOption(
+            'disabled',
+            $pageName !== Crud::PAGE_NEW
+        );
 
         yield Field::new('name');
         yield AssociationField::new('topic');
