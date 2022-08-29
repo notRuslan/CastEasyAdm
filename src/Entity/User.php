@@ -63,17 +63,22 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         $this->answers = new ArrayCollection();
     }
 
-    public function getId(): ?int
+    public function __toString():string
+    {
+        return $this->getFullName();
+    }
+
+    public function getId():?int
     {
         return $this->id;
     }
 
-    public function getEmail(): ?string
+    public function getEmail():?string
     {
         return $this->email;
     }
 
-    public function setEmail(string $email): self
+    public function setEmail(string $email):self
     {
         $this->email = $email;
 
@@ -85,23 +90,23 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
      *
      * @see UserInterface
      */
-    public function getUserIdentifier(): string
+    public function getUserIdentifier():string
     {
-        return (string) $this->email;
+        return (string)$this->email;
     }
 
     /**
      * @deprecated since Symfony 5.3, use getUserIdentifier instead
      */
-    public function getUsername(): string
+    public function getUsername():string
     {
-        return (string) $this->email;
+        return (string)$this->email;
     }
 
     /**
      * @see UserInterface
      */
-    public function getRoles(): array
+    public function getRoles():array
     {
         $roles = $this->roles;
         // guarantee every user at least has ROLE_USER
@@ -110,7 +115,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         return array_unique($roles);
     }
 
-    public function setRoles(array $roles): self
+    public function setRoles(array $roles):self
     {
         $this->roles = $roles;
 
@@ -120,24 +125,24 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     /**
      * @see PasswordAuthenticatedUserInterface
      */
-    public function getPassword(): string
+    public function getPassword():string
     {
         return $this->password;
     }
 
-    public function setPassword(string $password): self
+    public function setPassword(string $password):self
     {
         $this->password = $password;
 
         return $this;
     }
 
-    public function getPlainPassword(): string
+    public function getPlainPassword():string
     {
         return $this->plainPassword;
     }
 
-    public function setPlainPassword(string $plainPassword): void
+    public function setPlainPassword(string $plainPassword):void
     {
         $this->plainPassword = $plainPassword;
     }
@@ -148,7 +153,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
      *
      * @see UserInterface
      */
-    public function getSalt(): ?string
+    public function getSalt():?string
     {
         return null;
     }
@@ -159,50 +164,50 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     public function eraseCredentials()
     {
         // If you store any temporary, sensitive data on the user, clear it here
-         $this->plainPassword = null;
+        $this->plainPassword = null;
     }
 
-    public function isEnabled(): bool
+    public function isEnabled():bool
     {
         return $this->enabled;
     }
 
-    public function setEnabled(bool $enabled): void
+    public function setEnabled(bool $enabled):void
     {
         $this->enabled = $enabled;
     }
 
-    public function getFirstName(): ?string
+    public function getFirstName():?string
     {
         return $this->firstName;
     }
 
-    public function setFirstName(string $firstName): void
+    public function setFirstName(string $firstName):void
     {
         $this->firstName = $firstName;
     }
 
-    public function getLastName(): ?string
+    public function getLastName():?string
     {
         return $this->lastName;
     }
 
-    public function setLastName(string $lastName): void
+    public function setLastName(string $lastName):void
     {
         $this->lastName = $lastName;
     }
 
-    public function getFullName(): ?string
+    public function getFullName():?string
     {
-        return $this->firstName.' '.$this->lastName;
+        return $this->firstName . ' ' . $this->lastName;
     }
 
-    public function getAvatar(): ?string
+    public function getAvatar():?string
     {
         return $this->avatar;
     }
 
-    public function getAvatarUrl(): ?string
+    public function getAvatarUrl():?string
     {
         if (!$this->avatar) {
             return null;
@@ -215,7 +220,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         return sprintf('/uploads/avatars/%s', $this->avatar);
     }
 
-    public function setAvatar(?string $avatar): void
+    public function setAvatar(?string $avatar):void
     {
         $this->avatar = $avatar;
     }
@@ -223,12 +228,12 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     /**
      * @return Collection|Question[]
      */
-    public function getQuestions(): Collection
+    public function getQuestions():Collection
     {
         return $this->questions;
     }
 
-    public function addQuestion(Question $question): self
+    public function addQuestion(Question $question):self
     {
         if (!$this->questions->contains($question)) {
             $this->questions[] = $question;
@@ -238,7 +243,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         return $this;
     }
 
-    public function removeQuestion(Question $question): self
+    public function removeQuestion(Question $question):self
     {
         if ($this->questions->removeElement($question)) {
             // set the owning side to null (unless already changed)
@@ -253,12 +258,12 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     /**
      * @return Collection|Answer[]
      */
-    public function getAnswers(): Collection
+    public function getAnswers():Collection
     {
         return $this->answers;
     }
 
-    public function addAnswer(Answer $answer): self
+    public function addAnswer(Answer $answer):self
     {
         if (!$this->answers->contains($answer)) {
             $this->answers[] = $answer;
@@ -268,7 +273,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         return $this;
     }
 
-    public function removeAnswer(Answer $answer): self
+    public function removeAnswer(Answer $answer):self
     {
         if ($this->answers->removeElement($answer)) {
             // set the owning side to null (unless already changed)
