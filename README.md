@@ -3,6 +3,14 @@
 Well hi there! This repository holds the code and script
 for the EasyAdminBundle tutorial on SymfonyCasts.
 
+## My Notes
+- Check configuration 
+
+symfony console debug:container --tag=ea.field_configurator
+
+and set lower priority (-1)
+
+
 ## Setup
 
 If you've just downloaded the code, congratulations!!
