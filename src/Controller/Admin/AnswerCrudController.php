@@ -8,7 +8,6 @@ use EasyCorp\Bundle\EasyAdminBundle\Field\AssociationField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\Field;
 use EasyCorp\Bundle\EasyAdminBundle\Field\IdField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\IntegerField;
-use EasyCorp\Bundle\EasyAdminBundle\Field\TextField;
 
 class AnswerCrudController extends AbstractCrudController
 {
@@ -22,8 +21,7 @@ class AnswerCrudController extends AbstractCrudController
     {
         yield IdField::new('id')
             ->onlyOnIndex();
-        yield TextField::new('answer')
-        ->setMaxLength(50);
+        yield Field::new('answer');
         yield IntegerField::new('votes');
         yield AssociationField::new('question')
             ->hideOnIndex();
