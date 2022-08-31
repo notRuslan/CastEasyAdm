@@ -28,14 +28,14 @@ class DashboardController extends AbstractDashboardController
     public function __construct(
         private AdminUrlGenerator  $adminUrlGenerator,
         private QuestionRepository $questionRepository,
-        private ChartBuilderInterface $chartBuilder
+//        private ChartBuilderInterface $chartBuilder
     )
     {
     }
 
     #[IsGranted('ROLE_ADMIN')]
     #[Route('/admin', name: 'admin')]
-    public function index():Response
+    public function index(ChartBuilderInterface $chartBuilder = null):Response
     {
 //        return parent::index();
         /*$url = $this->adminUrlGenerator
@@ -44,13 +44,15 @@ class DashboardController extends AbstractDashboardController
         return $this->redirect($url);*/
 //        return $this->render('my-dashboard.html.twig');
 
+        assert(null !== $chartBuilder);
+
         $latestQuestions = $this->questionRepository->findLatest();
         $topVoted = $this->questionRepository->findTopVoted();
 
         return $this->render('admin/index.html.twig', [
             'latestQuestions' => $latestQuestions,
             'topVoted' => $topVoted,
-            'chart' => $this->createChart(),
+            'chart' => $this->createChart($chartBuilder),
         ]);
 
     }
@@ -120,9 +122,9 @@ class DashboardController extends AbstractDashboardController
     }
 
 
-    private function createChart(): Chart
+    private function createChart($chartBuilder): Chart
     {
-        $chart = $this->chartBuilder->createChart(Chart::TYPE_LINE);
+        $chart = $chartBuilder->createChart(Chart::TYPE_LINE);
         $chart->setData([
                             'labels' => ['January', 'February', 'March', 'April', 'May', 'June', 'July'],
                             'datasets' => [
