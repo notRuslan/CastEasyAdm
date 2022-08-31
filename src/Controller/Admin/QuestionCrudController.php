@@ -11,6 +11,7 @@ use EasyCorp\Bundle\EasyAdminBundle\Field\AssociationField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\Field;
 use EasyCorp\Bundle\EasyAdminBundle\Field\IdField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\TextareaField;
+use EasyCorp\Bundle\EasyAdminBundle\Field\TextEditorField;
 
 class QuestionCrudController extends AbstractCrudController
 {
@@ -34,7 +35,7 @@ class QuestionCrudController extends AbstractCrudController
         yield Field::new('name')
         ->setSortable(false);
         yield AssociationField::new('topic');
-        yield TextareaField::new('question')
+        yield TextEditorField::new('question')
             ->hideOnIndex();
         yield VotesField::new('votes', 'Total votes')
             ->setTextAlign('right');
