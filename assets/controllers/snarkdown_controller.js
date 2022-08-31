@@ -2,6 +2,8 @@ import { Controller } from '@hotwired/stimulus';
 import snarkdown from 'snarkdown';
 const document = window.document;
 
+/* StimulusFetch: 'lazy' */
+
 export default class extends Controller {
     static targets = ['input'];
 
