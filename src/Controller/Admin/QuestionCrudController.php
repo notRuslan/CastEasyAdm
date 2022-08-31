@@ -35,7 +35,8 @@ class QuestionCrudController extends AbstractCrudController
         yield Field::new('name')
         ->setSortable(false);
         yield AssociationField::new('topic');
-        yield TextEditorField::new('question')
+//        yield TextEditorField::new('question')
+        yield TextareaField::new('question')
             ->hideOnIndex();
         yield VotesField::new('votes', 'Total votes')
             ->setTextAlign('right');
