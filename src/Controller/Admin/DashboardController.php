@@ -49,7 +49,8 @@ class DashboardController extends AbstractDashboardController
 
         return $this->render('admin/index.html.twig', [
             'latestQuestions' => $latestQuestions,
-            'topVoted' => $topVoted
+            'topVoted' => $topVoted,
+            'chart' => $this->createChart(),
         ]);
 
     }
