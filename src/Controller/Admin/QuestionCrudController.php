@@ -37,7 +37,17 @@ class QuestionCrudController extends AbstractCrudController
         yield AssociationField::new('topic');
 //        yield TextEditorField::new('question')
         yield TextareaField::new('question')
-            ->hideOnIndex();
+            ->hideOnIndex()
+        ->setFormTypeOptions([
+            'row_attr' => [
+                'data-controller' => 'snarkdown'
+            ],
+            'attr' => [
+                'data-snarkdown-target' => 'input',
+                'data-action' => 'snarkdown#render'
+            ]
+                             ])
+        ->setHelp('Preview: ');
         yield VotesField::new('votes', 'Total votes')
             ->setTextAlign('right');
         /*yield Field::new('votes', 'Total Votes')
