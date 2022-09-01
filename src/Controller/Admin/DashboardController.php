@@ -60,7 +60,7 @@ class DashboardController extends AbstractDashboardController
     public function configureDashboard():Dashboard
     {
         return Dashboard::new()
-            ->disableUrlSignatures()
+//            ->disableUrlSignatures()
             ->setFaviconPath('favicon.svg')
             ->setTitle('Easy Admin For me');
     }
