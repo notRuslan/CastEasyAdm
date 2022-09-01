@@ -3,6 +3,7 @@
 namespace App\Controller\Admin;
 
 use App\Entity\User;
+use EasyCorp\Bundle\EasyAdminBundle\Config\Crud;
 use EasyCorp\Bundle\EasyAdminBundle\Controller\AbstractCrudController;
 use EasyCorp\Bundle\EasyAdminBundle\Field\ArrayField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\AvatarField;
@@ -74,5 +75,12 @@ class UserCrudController extends AbstractCrudController
 
 
     }
+
+    public function configureCrud(Crud $crud):Crud
+    {
+        return parent::configureCrud($crud)
+            ->setEntityPermission('ADMIN_USER_EDIT');
+    }
+
 
 }
