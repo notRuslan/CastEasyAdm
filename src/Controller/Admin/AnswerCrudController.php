@@ -28,6 +28,7 @@ class AnswerCrudController extends AbstractCrudController
         ->setTemplatePath('admin/field/votes.html.twig');*/
         yield AssociationField::new('question')
             ->autocomplete()
+            ->setCrudController(QuestionCrudController::class) // Have to tell which controller
             ->hideOnIndex();
         yield AssociationField::new('answeredBy');
         yield Field::new('createdAt')
