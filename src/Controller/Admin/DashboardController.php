@@ -60,6 +60,7 @@ class DashboardController extends AbstractDashboardController
     public function configureDashboard():Dashboard
     {
         return Dashboard::new()
+            ->disableUrlSignatures()
             ->setFaviconPath('favicon.svg')
             ->setTitle('Easy Admin For me');
     }
@@ -69,7 +70,8 @@ class DashboardController extends AbstractDashboardController
         yield MenuItem::linkToDashboard('Dashboard', 'fa fa-dashboard');
 //        yield MenuItem::linkToDashboard('Dashboard', 'fa fa-home');
         yield MenuItem::linkToCrud('Questions', 'fas fa-question-circle', Question::class);
-        yield MenuItem::linkToCrud('Answers', 'fas fa-comments', Answer::class);
+        yield MenuItem::linkToCrud('Answers', 'fas fa-comments', Answer::class)
+        ->setPermission('ROLE_MODERATOR');
         yield MenuItem::linkToCrud('Topics', 'fas fa-folder', Topic::class);
         yield MenuItem::linkToCrud('Users', 'fas fa-users', User::class);
 //        yield MenuItem::linkToRoute('HomePage', 'fas fa-home', 'app_homepage');
