@@ -105,7 +105,7 @@ class QuestionCrudController extends AbstractCrudController
 
     public function configureActions(Actions $actions): Actions
     {
-        $viewAction = Action::new('view')
+        /*$viewAction = Action::new('view')
         ->linkToUrl(function (Question $question){
            return $this->generateUrl('app_question_show', [
                'slug' => $question->getSlug(),
@@ -113,10 +113,10 @@ class QuestionCrudController extends AbstractCrudController
         })
         ->addCssClass('btn btn-success')
         ->setIcon('fa fa-eye')
-        ->setLabel('View on site');
+        ->setLabel('View on site');*/
 
-        //Does not work
-        /*$viewAction = function() {
+        //Second way
+        $viewAction = function() {
             return Action::new('view')
                 ->linkToUrl(function(Question $question) {
                     return $this->generateUrl('app_question_show', [
@@ -125,7 +125,7 @@ class QuestionCrudController extends AbstractCrudController
                 })
                 ->setIcon('fa fa-eye')
                 ->setLabel('View on site');
-        }*/
+        };
 
         return parent::configureActions($actions)
             ->update(Crud::PAGE_INDEX, Action::DELETE, static function(Action $action) {
@@ -142,11 +142,11 @@ class QuestionCrudController extends AbstractCrudController
             ->setPermission(Action::NEW, 'ROLE_SUPER_ADMIN')
             ->setPermission(Action::DELETE, 'ROLE_SUPER_ADMIN')
             ->setPermission(Action::BATCH_DELETE, 'ROLE_SUPER_ADMIN')
-            //Does not work this method
-//            ->add(Crud::PAGE_DETAIL, $viewAction->addCssClass('btn btn-success'))
-//            ->add(Crud::PAGE_INDEX, $viewAction);
-        ->add(Crud::PAGE_DETAIL, $viewAction)
-        ->add(Crud::PAGE_INDEX, $viewAction);
+
+            ->add(Crud::PAGE_DETAIL, $viewAction()->addCssClass('btn btn-success'))
+            ->add(Crud::PAGE_INDEX, $viewAction());
+//        ->add(Crud::PAGE_DETAIL, $viewAction)
+//        ->add(Crud::PAGE_INDEX, $viewAction);
     }
 
     public function configureFilters(Filters $filters):Filters
