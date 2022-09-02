@@ -18,6 +18,7 @@ use EasyCorp\Bundle\EasyAdminBundle\Field\IdField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\TextareaField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\TextEditorField;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
+use function Sodium\add;
 
 #[IsGranted('ROLE_MODERATOR')]
 class QuestionCrudController extends AbstractCrudController
@@ -104,11 +105,21 @@ class QuestionCrudController extends AbstractCrudController
 
     public function configureActions(Actions $actions): Actions
     {
+        $viewAction = Action::new('view')
+        ->linkToUrl(function (Question $question){
+           return $this->generateUrl('app_question_show', [
+               'slug' => $question->getSlug(),
+           ]);
+        })
+        ->addCssClass('btn btn-success')
+        ->setIcon('fa fa-eye')
+        ->setLabel('View on site');
+
         return parent::configureActions($actions)
             ->update(Crud::PAGE_INDEX, Action::DELETE, static function(Action $action) {
                 $action->displayIf(static function (Question $question) {
-                    return !$question->getIsApproved();
-//                    return true;
+//                    return !$question->getIsApproved();
+                    return true;
                 });
 
                 return $action;
@@ -118,7 +129,8 @@ class QuestionCrudController extends AbstractCrudController
             ->setPermission(Action::EDIT, 'ROLE_MODERATOR')
             ->setPermission(Action::NEW, 'ROLE_SUPER_ADMIN')
             ->setPermission(Action::DELETE, 'ROLE_SUPER_ADMIN')
-            ->setPermission(Action::BATCH_DELETE, 'ROLE_SUPER_ADMIN');
+            ->setPermission(Action::BATCH_DELETE, 'ROLE_SUPER_ADMIN')
+        ->add(Crud::PAGE_DETAIL, $viewAction);
     }
 
     public function configureFilters(Filters $filters):Filters
