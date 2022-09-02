@@ -18,7 +18,7 @@ class HideActionSubsriberSubscriber implements EventSubscriberInterface
         if (!$crudDto = $adminContext->getCrud()) {
             return;
         }
-        if ($crudDto->getControllerFqcn() !== Question::class) {
+        if ($crudDto->getEntityFqcn() !== Question::class) {
             return;
         }
 
