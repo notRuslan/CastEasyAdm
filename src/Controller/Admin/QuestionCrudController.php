@@ -77,6 +77,8 @@ class QuestionCrudController extends AbstractCrudController
 
         yield Field::new('createdAt')
         ->hideOnForm();
+        yield AssociationField::new('updatedBy')
+        ->onlyOnDetail() ;
 
     }
 
