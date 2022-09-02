@@ -130,7 +130,8 @@ class QuestionCrudController extends AbstractCrudController
             ->setPermission(Action::NEW, 'ROLE_SUPER_ADMIN')
             ->setPermission(Action::DELETE, 'ROLE_SUPER_ADMIN')
             ->setPermission(Action::BATCH_DELETE, 'ROLE_SUPER_ADMIN')
-        ->add(Crud::PAGE_DETAIL, $viewAction);
+        ->add(Crud::PAGE_DETAIL, $viewAction)
+        ->add(Crud::PAGE_INDEX, $viewAction);
     }
 
     public function configureFilters(Filters $filters):Filters
