@@ -51,8 +51,8 @@ class DashboardController extends AbstractDashboardController
 
         return $this->render('admin/index.html.twig', [
             'latestQuestions' => $latestQuestions,
-            'topVoted' => $topVoted,
-            'chart' => $this->createChart($chartBuilder),
+            'topVoted'        => $topVoted,
+            'chart'           => $this->createChart($chartBuilder),
         ]);
 
     }
@@ -69,23 +69,21 @@ class DashboardController extends AbstractDashboardController
     {
         yield MenuItem::linkToDashboard('Dashboard', 'fa fa-dashboard');
 //        yield MenuItem::linkToDashboard('Dashboard', 'fa fa-home');
-        yield MenuItem::linkToCrud('Questions', 'fas fa-question-circle', Question::class)
-            ->setPermission('ROLE_MODERATOR')
-        ->setController(QuestionCrudController::class);
-        yield MenuItem::linkToCrud('Pending Approval', 'far fa-question-circle', Question::class)
-            ->setPermission('ROLE_MODERATOR')
-        ->setController(QuestionPendingApprovalCrudController::class);
+        yield MenuItem::subMenu('Questions', 'fa fa-question-circle')
+            ->setSubItems([
+                              MenuItem::linkToCrud('All', 'fa fa-list', Question::class)
+                                  ->setPermission('ROLE_MODERATOR')
+                                  ->setController(QuestionCrudController::class),
+                              MenuItem::linkToCrud('Pending Approval', 'far fa-warning', Question::class)
+                                  ->setPermission('ROLE_MODERATOR')
+                                  ->setController(QuestionPendingApprovalCrudController::class),
+                          ]);
         yield MenuItem::linkToCrud('Answers', 'fas fa-comments', Answer::class);
         yield MenuItem::linkToCrud('Topics', 'fas fa-folder', Topic::class);
         yield MenuItem::linkToCrud('Users', 'fas fa-users', User::class);
 //        yield MenuItem::linkToRoute('HomePage', 'fas fa-home', 'app_homepage');
         yield MenuItem::linkToUrl('HomePage', 'fas fa-home', $this->generateUrl('app_homepage'));
 
-        /*return [
-            MenuItem::linkToRoute('The Label', 'fa ...', 'admin'),
-            MenuItem::linkToDashboard('Dashboard', 'fa fa-home'),
-            MenuItem::linkToCrud('The Label', 'fas fa-list', Question::class),
-        ];*/
 
     }
 
@@ -129,17 +127,17 @@ class DashboardController extends AbstractDashboardController
     }
 
 
-    private function createChart($chartBuilder): Chart
+    private function createChart($chartBuilder):Chart
     {
         $chart = $chartBuilder->createChart(Chart::TYPE_LINE);
         $chart->setData([
-                            'labels' => ['January', 'February', 'March', 'April', 'May', 'June', 'July'],
+                            'labels'   => ['January', 'February', 'March', 'April', 'May', 'June', 'July'],
                             'datasets' => [
                                 [
-                                    'label' => 'My First dataset',
+                                    'label'           => 'My First dataset',
                                     'backgroundColor' => 'rgb(255, 99, 132)',
-                                    'borderColor' => 'rgb(255, 99, 132)',
-                                    'data' => [0, 10, 5, 2, 20, 30, 45],
+                                    'borderColor'     => 'rgb(255, 99, 132)',
+                                    'data'            => [0, 10, 5, 2, 20, 30, 45],
                                 ],
                             ],
                         ]);
@@ -155,7 +153,6 @@ class DashboardController extends AbstractDashboardController
 
         return $chart;
     }
-
 
 
 }
