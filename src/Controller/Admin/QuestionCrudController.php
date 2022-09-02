@@ -115,6 +115,18 @@ class QuestionCrudController extends AbstractCrudController
         ->setIcon('fa fa-eye')
         ->setLabel('View on site');
 
+        //Does not work
+        /*$viewAction = function() {
+            return Action::new('view')
+                ->linkToUrl(function(Question $question) {
+                    return $this->generateUrl('app_question_show', [
+                        'slug' => $question->getSlug(),
+                    ]);
+                })
+                ->setIcon('fa fa-eye')
+                ->setLabel('View on site');
+        }*/
+
         return parent::configureActions($actions)
             ->update(Crud::PAGE_INDEX, Action::DELETE, static function(Action $action) {
                 $action->displayIf(static function (Question $question) {
@@ -130,6 +142,9 @@ class QuestionCrudController extends AbstractCrudController
             ->setPermission(Action::NEW, 'ROLE_SUPER_ADMIN')
             ->setPermission(Action::DELETE, 'ROLE_SUPER_ADMIN')
             ->setPermission(Action::BATCH_DELETE, 'ROLE_SUPER_ADMIN')
+            //Does not work this method
+//            ->add(Crud::PAGE_DETAIL, $viewAction->addCssClass('btn btn-success'))
+//            ->add(Crud::PAGE_INDEX, $viewAction);
         ->add(Crud::PAGE_DETAIL, $viewAction)
         ->add(Crud::PAGE_INDEX, $viewAction);
     }
