@@ -32,7 +32,7 @@ class BlameableSubscriber implements EventSubscriberInterface
     public static function getSubscribedEvents()
     {
         return [
-            BeforeEntityUpdatedEvent::class => 'onBeforeEntityUpdatedEvent',
+//            BeforeEntityUpdatedEvent::class => 'onBeforeEntityUpdatedEvent',
         ];
     }
 }
