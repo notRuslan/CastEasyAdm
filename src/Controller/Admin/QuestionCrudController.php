@@ -47,7 +47,8 @@ class QuestionCrudController extends AbstractCrudController
     {
         yield IdField::new('id')
             ->onlyOnIndex();
-        yield FormField::addPanel('Basic Data');
+        yield FormField::addPanel('Basic Data')
+            ->collapsible();
         yield Field::new('slug')
             ->hideOnIndex()
             ->setFormTypeOption(
@@ -74,7 +75,9 @@ class QuestionCrudController extends AbstractCrudController
         yield VotesField::new('votes', 'Total votes')
             ->setTextAlign('right')
             ->setPermission('ROLE_SUPER_ADMIN');
-        yield FormField::addPanel('Details');
+        yield FormField::addPanel('Details')
+            ->collapsible()->setIcon('fa fa-info')
+            ->setHelp('Additional details');
         yield AssociationField::new('askedBy')
             ->autocomplete()
             ->formatValue(static function ($value, ?Question $question) {
