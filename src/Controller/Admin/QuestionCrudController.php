@@ -18,6 +18,7 @@ use EasyCorp\Bundle\EasyAdminBundle\Controller\AbstractCrudController;
 use EasyCorp\Bundle\EasyAdminBundle\Factory\FilterFactory;
 use EasyCorp\Bundle\EasyAdminBundle\Field\AssociationField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\Field;
+use EasyCorp\Bundle\EasyAdminBundle\Field\FormField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\IdField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\TextareaField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\TextEditorField;
@@ -30,11 +31,12 @@ use function Sodium\add;
 class QuestionCrudController extends AbstractCrudController
 {
     public function __construct(private AdminUrlGenerator $adminUrlGenerator,
-                                private RequestStack $requestStack
+                                private RequestStack      $requestStack
     )
     {
 
     }
+
     public static function getEntityFqcn():string
     {
         return Question::class;
@@ -45,6 +47,7 @@ class QuestionCrudController extends AbstractCrudController
     {
         yield IdField::new('id')
             ->onlyOnIndex();
+        yield FormField::addPanel('Basic Data');
         yield Field::new('slug')
             ->hideOnIndex()
             ->setFormTypeOption(
@@ -71,7 +74,7 @@ class QuestionCrudController extends AbstractCrudController
         yield VotesField::new('votes', 'Total votes')
             ->setTextAlign('right')
             ->setPermission('ROLE_SUPER_ADMIN');
-
+        yield FormField::addPanel('Details');
         yield AssociationField::new('askedBy')
             ->autocomplete()
             ->formatValue(static function ($value, ?Question $question) {
@@ -151,14 +154,13 @@ class QuestionCrudController extends AbstractCrudController
 
         $exportAction = Action::new('export')
 //            ->linkToCrudAction('export')
-            ->linkToUrl(function (){
+            ->linkToUrl(function () {
                 $request = $this->requestStack->getCurrentRequest();
 
                 return $this->adminUrlGenerator
                     ->setAll($request->query->all()) // get all original params
                     ->setAction('export')
-                    ->generateUrl()
-                    ;
+                    ->generateUrl();
             })
             ->createAsGlobalAction()
             ->addCssClass('btn btn-success')
@@ -189,8 +191,7 @@ class QuestionCrudController extends AbstractCrudController
                 Action::EDIT,
                 Action::INDEX,
                 Action::DELETE
-            ])
-            ;
+            ]);
 //        ->add(Crud::PAGE_DETAIL, $viewAction)
 //        ->add(Crud::PAGE_INDEX, $viewAction);
     }
