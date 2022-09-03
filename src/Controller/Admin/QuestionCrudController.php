@@ -5,14 +5,17 @@ namespace App\Controller\Admin;
 use App\EasyAdmin\VotesField;
 use App\Entity\Question;
 use App\Entity\User;
+use App\Service\CsvExporter;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\QueryBuilder;
+use EasyCorp\Bundle\EasyAdminBundle\Collection\FieldCollection;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Action;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Actions;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Crud;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Filters;
 use EasyCorp\Bundle\EasyAdminBundle\Context\AdminContext;
 use EasyCorp\Bundle\EasyAdminBundle\Controller\AbstractCrudController;
+use EasyCorp\Bundle\EasyAdminBundle\Factory\FilterFactory;
 use EasyCorp\Bundle\EasyAdminBundle\Field\AssociationField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\Field;
 use EasyCorp\Bundle\EasyAdminBundle\Field\IdField;
@@ -135,9 +138,15 @@ class QuestionCrudController extends AbstractCrudController
             ->displayAsButton()
             ->setTemplatePath('admin/approve_action.html.twig')
             ->linkToCrudAction('approve')
-        ->displayIf(static function(Question $question): bool{
-            return !$question->getIsApproved();
-        });
+            ->displayIf(static function (Question $question):bool {
+                return !$question->getIsApproved();
+            });
+
+        $exportAction = Action::new('export')
+            ->linkToCrudAction('export')
+            ->createAsGlobalAction()
+            ->addCssClass('btn btn-success')
+            ->setIcon('fa fa-download');
 
         return parent::configureActions($actions)
             ->update(Crud::PAGE_INDEX, Action::DELETE, static function (Action $action) {
@@ -156,7 +165,8 @@ class QuestionCrudController extends AbstractCrudController
             ->setPermission(Action::BATCH_DELETE, 'ROLE_SUPER_ADMIN')
             ->add(Crud::PAGE_DETAIL, $viewAction()->addCssClass('btn btn-success'))
             ->add(Crud::PAGE_INDEX, $viewAction())
-            ->add(Crud::PAGE_DETAIL, $approveAction);
+            ->add(Crud::PAGE_DETAIL, $approveAction)
+            ->add(Crud::PAGE_INDEX, $exportAction);
 //        ->add(Crud::PAGE_DETAIL, $viewAction)
 //        ->add(Crud::PAGE_INDEX, $viewAction);
     }
@@ -197,7 +207,7 @@ class QuestionCrudController extends AbstractCrudController
     public function approve(AdminContext $adminContext, EntityManagerInterface $entityManager, AdminUrlGenerator $adminUrlGenerator)
     {
         $question = $adminContext->getEntity()->getInstance();
-        if(!$question instanceof Question){
+        if (!$question instanceof Question) {
             throw new \LogicException('Entity is missing or not a Question');
         }
 
@@ -210,6 +220,19 @@ class QuestionCrudController extends AbstractCrudController
             ->generateUrl();
 
         return $this->redirect($targetUrl);
+    }
+
+    public function export(AdminContext $context, CsvExporter $csvExporter)
+    {
+        $fields = FieldCollection::new($this->configureFields(Crud::PAGE_INDEX));
+        $filters = $this->container->get(FilterFactory::class)->create($context->getCrud()->getFiltersConfig(), $fields, $context->getEntity());
+        $queryBuilder = $this->createIndexQueryBuilder($context->getSearch(), $context->getEntity(), $fields, $filters);
+
+        return $csvExporter->createResponseFromQueryBuilder(
+            $queryBuilder,
+            $fields,
+            'questions.csv'
+        );
     }
 
 }
