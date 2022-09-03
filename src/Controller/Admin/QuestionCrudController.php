@@ -23,11 +23,18 @@ use EasyCorp\Bundle\EasyAdminBundle\Field\TextareaField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\TextEditorField;
 use EasyCorp\Bundle\EasyAdminBundle\Router\AdminUrlGenerator;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
+use Symfony\Component\HttpFoundation\RequestStack;
 use function Sodium\add;
 
 #[IsGranted('ROLE_MODERATOR')]
 class QuestionCrudController extends AbstractCrudController
 {
+    public function __construct(private AdminUrlGenerator $adminUrlGenerator,
+                                private RequestStack $requestStack
+    )
+    {
+
+    }
     public static function getEntityFqcn():string
     {
         return Question::class;
@@ -143,7 +150,16 @@ class QuestionCrudController extends AbstractCrudController
             });
 
         $exportAction = Action::new('export')
-            ->linkToCrudAction('export')
+//            ->linkToCrudAction('export')
+            ->linkToUrl(function (){
+                $request = $this->requestStack->getCurrentRequest();
+
+                return $this->adminUrlGenerator
+                    ->setAll($request->query->all()) // get all original params
+                    ->setAction('export')
+                    ->generateUrl()
+                    ;
+            })
             ->createAsGlobalAction()
             ->addCssClass('btn btn-success')
             ->setIcon('fa fa-download');
