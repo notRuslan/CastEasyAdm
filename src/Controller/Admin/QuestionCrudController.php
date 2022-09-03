@@ -18,6 +18,7 @@ use EasyCorp\Bundle\EasyAdminBundle\Field\Field;
 use EasyCorp\Bundle\EasyAdminBundle\Field\IdField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\TextareaField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\TextEditorField;
+use EasyCorp\Bundle\EasyAdminBundle\Router\AdminUrlGenerator;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use function Sodium\add;
 
@@ -190,7 +191,7 @@ class QuestionCrudController extends AbstractCrudController
         parent::deleteEntity($entityManager, $entityInstance);
     }
 
-    public function approve(AdminContext $adminContext, EntityManagerInterface $entityManager)
+    public function approve(AdminContext $adminContext, EntityManagerInterface $entityManager, AdminUrlGenerator $adminUrlGenerator)
     {
         $question = $adminContext->getEntity()->getInstance();
         if(!$question instanceof Question){
@@ -199,6 +200,13 @@ class QuestionCrudController extends AbstractCrudController
 
         $question->setIsApproved(true);
         $entityManager->flush();
+
+        $targetUrl = $adminUrlGenerator->setController(self::class)
+            ->setAction(Crud::PAGE_DETAIL)
+            ->setEntityId($question->getId())
+            ->generateUrl();
+
+        return $this->redirect($targetUrl);
     }
 
 }
