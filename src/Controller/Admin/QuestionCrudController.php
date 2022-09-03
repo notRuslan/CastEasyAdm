@@ -50,15 +50,17 @@ class QuestionCrudController extends AbstractCrudController
         yield FormField::addTab('Basic Data')
 //            ->collapsible()
         ;
+        yield Field::new('name')
+            ->setSortable(false)
+        ->setColumns(5);
         yield Field::new('slug')
             ->hideOnIndex()
             ->setFormTypeOption(
                 'disabled',
                 $pageName !== Crud::PAGE_NEW
-            );
+            )
+            ->setColumns(5);
 
-        yield Field::new('name')
-            ->setSortable(false);
         yield AssociationField::new('topic');
 //        yield TextEditorField::new('question')
         yield TextareaField::new('question')
