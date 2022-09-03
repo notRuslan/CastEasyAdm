@@ -11,6 +11,7 @@ use EasyCorp\Bundle\EasyAdminBundle\Config\Action;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Actions;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Crud;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Filters;
+use EasyCorp\Bundle\EasyAdminBundle\Context\AdminContext;
 use EasyCorp\Bundle\EasyAdminBundle\Controller\AbstractCrudController;
 use EasyCorp\Bundle\EasyAdminBundle\Field\AssociationField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\Field;
@@ -189,5 +190,15 @@ class QuestionCrudController extends AbstractCrudController
         parent::deleteEntity($entityManager, $entityInstance);
     }
 
+    public function approve(AdminContext $adminContext, EntityManagerInterface $entityManager)
+    {
+        $question = $adminContext->getEntity()->getInstance();
+        if(!$question instanceof Question){
+            throw new \LogicException('Entity is missing or not a Question');
+        }
+
+        $question->setIsApproved(true);
+        $entityManager->flush();
+    }
 
 }
